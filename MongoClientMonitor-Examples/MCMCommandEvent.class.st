@@ -6,7 +6,7 @@ Class {
 		'retryCommand',
 		'type'
 	],
-	#category : #'MongoClientMonitor-Core'
+	#category : #'MongoClientMonitor-Examples'
 }
 
 { #category : #printing }
