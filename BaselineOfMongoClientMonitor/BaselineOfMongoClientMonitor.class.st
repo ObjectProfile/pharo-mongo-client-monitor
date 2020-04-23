@@ -22,6 +22,13 @@ BaselineOfMongoClientMonitor >> addRoassal3: spec [
 ]
 
 { #category : #baseline }
+BaselineOfMongoClientMonitor >> addTealight: spec [
+	spec
+		baseline: 'Tealight'
+		with: [ spec repository: 'github://astares/Tealight/repository' ]
+]
+
+{ #category : #baseline }
 BaselineOfMongoClientMonitor >> baseline: spec [
 	<baseline>
 	spec
@@ -29,7 +36,8 @@ BaselineOfMongoClientMonitor >> baseline: spec [
 		do: [ 
 			self addMongoClient: spec.
 			self addRoassal3: spec.
+			self addTealight: spec.
 			spec
 				package: 'MongoClientMonitor'
-				with: [ spec requires: #(MongoClient Roassal3) ] ]
+				with: [ spec requires: #(MongoClient Tealight Roassal3) ] ]
 ]
