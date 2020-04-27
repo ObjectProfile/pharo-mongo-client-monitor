@@ -42,19 +42,19 @@ BaselineOfMongoClientMonitor >> declareMongoTalkOn: spec [
 BaselineOfMongoClientMonitor >> declareRoassal3On: spec [
 	spec
 		baseline: 'Roassal3'
-		with: [ spec repository: 'github://ObjectProfile/Roassal3:master/mc' ]
+		with: [ spec repository: 'github://ObjectProfile/Roassal3:master/src' ]
 ]
 
 { #category : #'external projects' }
 BaselineOfMongoClientMonitor >> declareTaskItOn: spec [
 	spec
 		baseline: 'TaskIt'
-		with: [ spec repository: '' ]
+		with: [ spec repository: 'github://sbragagnolo/taskit:master' ]
 ]
 
 { #category : #'external projects' }
 BaselineOfMongoClientMonitor >> declareTealightOn: spec [
 	spec
 		baseline: 'Tealight'
-		with: [ spec repository: 'github://astares/Tealight/repository' ]
+		with: [ spec repository: 'github://astares/Tealight:master/repository' ]
 ]
