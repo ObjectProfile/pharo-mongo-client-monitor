@@ -1,4 +1,5 @@
-# pharo-mongo-client-monitor
+# pharo-mongo-client-monitor [![Build Status](https://travis-ci.org/tinchodias/pharo-mongo-client-monitor.png)](http://travis-ci.org/tinchodias/pharo-mongo-client-monitor)
+
 
 A visual monitor the Pharo client for Mongodb
 
