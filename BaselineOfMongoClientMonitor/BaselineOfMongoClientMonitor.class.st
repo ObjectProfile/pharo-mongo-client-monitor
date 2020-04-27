@@ -13,13 +13,13 @@ BaselineOfMongoClientMonitor >> baseline: spec [
 			self
 				declareMongoTalkOn: spec;
 				declareRoassal3On: spec;
-				declareTaskItOn: spec;
+"				declareTaskItOn: spec;"
 				declareTealightOn: spec.
 			spec
 				package: 'MongoClientMonitor-Core'
 					with: [ spec requires: #('MongoTalk') ];
 				package: 'MongoClientMonitor-Examples'
-					with: [ spec requires: #('MongoClientMonitor-Core' 'TaskIt') ];
+					with: [ spec requires: #('MongoClientMonitor-Core' "'TaskIt'") ];
 				package: 'MongoClientMonitor-Roassal3'
 					with: [ spec requires: #('MongoClientMonitor-Examples' 'Roassal3') ];
 				package: 'MongoClientMonitor-Tests'
