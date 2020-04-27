@@ -11,25 +11,27 @@ BaselineOfMongoClientMonitor >> baseline: spec [
 		for: #common
 		do: [
 			self
-				declareMongoClientOn: spec;
+				declareMongoTalkOn: spec;
 				declareRoassal3On: spec;
 				declareTaskItOn: spec;
 				declareTealightOn: spec.
 			spec
-				package: 'MongoClientMonitor-Core';
+				package: 'MongoClientMonitor-Core'
+					with: [ spec requires: #('MongoTalk') ];
 				package: 'MongoClientMonitor-Examples'
 					with: [ spec requires: #('MongoClientMonitor-Core' 'TaskIt') ];
 				package: 'MongoClientMonitor-Roassal3'
 					with: [ spec requires: #('MongoClientMonitor-Examples' 'Roassal3') ];
 				package: 'MongoClientMonitor-Tests'
-					with: [ spec
-						requires: #('MongoClientMonitor-Core' 'MongoClientMonitor-Examples') ] ]
+					with: [ spec requires: #(
+						'MongoClientMonitor-Core'
+						'MongoClientMonitor-Examples') ] ]
 ]
 
 { #category : #'external projects' }
-BaselineOfMongoClientMonitor >> declareMongoClientOn: spec [
+BaselineOfMongoClientMonitor >> declareMongoTalkOn: spec [
 	spec
-		baseline: 'MongoClient'
+		baseline: 'MongoTalk'
 		with: [
 			spec
 				repository: 'github://tinchodias/mongotalk:features-sdam2/mc';
