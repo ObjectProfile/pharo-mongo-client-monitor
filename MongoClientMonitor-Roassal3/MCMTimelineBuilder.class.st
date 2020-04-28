@@ -1,20 +1,47 @@
+"
+I build Roassal3 canvas with the timeline MCMEvents provided by a MCMRecorder.
+
+Example:
+-----
+
+example := MCMAutonomousExample new.
+example start.
+5 seconds wait.
+MongoReplicationTestResources signalStopA.
+5 seconds wait.
+MongoReplicationTestResources signalStopB.
+10 seconds wait.
+MongoReplicationTestResources continueAllServers.
+12 seconds wait.
+example stop.
+
+events := example recorder events contents.
+
+canvas := MCMTimelineBuilder new
+	events: events;
+	shouldBuildForAnimation: false;
+	build;
+	canvas.
+	
+canvas inspect.
+
+----
+"
 Class {
 	#name : #MCMTimelineBuilder,
 	#superclass : #RSAbstractContainerBuilder,
 	#instVars : [
 		'events',
 		'shouldBuildForAnimation',
-		'scale',
 		'heartbeatHeights',
 		'heartbeatBaseY',
-		'colorByTopologyType',
 		'serverColorScale',
 		'commandHeights',
-		'colorByCommandType',
 		'slotHeight',
 		'pulseHeight',
 		'lineWidth',
-		'lineColor'
+		'lineColor',
+		'timeScale'
 	],
 	#category : #'MongoClientMonitor-Roassal3'
 }
@@ -22,12 +49,10 @@ Class {
 { #category : #visiting }
 MCMTimelineBuilder >> addCommandLabels [
 
-	colorByCommandType keys do: [ :type |
-		| shape y color |
+	commandHeights keysDo: [ :type |
+		| shape y |
 		y := commandHeights at: type.
-		color := colorByCommandType at: type.
 		shape := self labelFor: type asString yPosition: y.
-		shape color: color.
 		self container add: shape.
 		
 		self container add: (self pulseRailAtY: y) ]
@@ -54,7 +79,7 @@ MCMTimelineBuilder >> addTimeTicks: event [
 	(event startTimestamp to: event endTimestamp by: timeTickStep)
 		withIndexDo: [ :each :index | 
 			| x color shape |
-			x := scale scale: each.
+			x := timeScale scale: each.
 			color := index \\ 4 = 1
 				ifTrue: [ lineColor alpha: 0.3 ]
 				ifFalse: [ lineColor alpha: 0.1 ].
@@ -85,17 +110,19 @@ MCMTimelineBuilder >> addTopologyLabel [
 ]
 
 { #category : #private }
-MCMTimelineBuilder >> boxFor: event yPosition: y height: h [
-	| a b w |
-	a := scale scale: event startTimestamp.
-	b := scale scale: event endTimestamp.
+MCMTimelineBuilder >> boxFor: event yPosition: y height: h color: aColor [
+	| a b w borderColor |
+	a := timeScale scale: event startTimestamp.
+	b := timeScale scale: event endTimestamp.
 	w := b - a.
+	borderColor := aColor mixed: 70 percent with: lineColor.
 	
 	^ RSBox new
 		width: w;
 		height: h;
 		position: (a+(w/2)) @ (y+(h/2));
-		border: (RSBorder new color: lineColor; width: lineWidth; yourself);
+		color: aColor;
+		border: (RSBorder new color: borderColor; width: lineWidth; yourself);
 		popup;
 		draggable;
 		yourself
@@ -109,7 +136,7 @@ MCMTimelineBuilder >> buildForAnimation [
 	canvas newAnimation
 		duration: self recordingDuration;
 		from: 0; 
-		to: scale range last;
+		to: timeScale range last;
 		onStepDo: [ :t |
 			canvas camera position: t @ (r floatCenter y).
 			canvas signalUpdate ].
@@ -117,6 +144,16 @@ MCMTimelineBuilder >> buildForAnimation [
 	canvas camera scale: 2.
 
 "	canvas inspect. canvas camera scale: canvas extent y / (r height + 40)"
+]
+
+{ #category : #private }
+MCMTimelineBuilder >> colorForTopology: aMongoTopology [
+	^ aMongoTopology isTypeReplicaSetWithPrimary
+		ifTrue: [ serverColorScale scale: aMongoTopology primaryUrlString ]
+		ifFalse: [
+			aMongoTopology isTypeReplicaSetNoPrimary
+				ifTrue: [ Color veryDarkGray ]
+				ifFalse: [ Color white ] ]
 ]
 
 { #category : #accessing }
@@ -128,21 +165,12 @@ MCMTimelineBuilder >> events: aCollection [
 MCMTimelineBuilder >> initialize [
 	super initialize.
 	shouldBuildForAnimation := false.
-	slotHeight := 20.
-	pulseHeight := 16.
+	slotHeight := 18.
+	pulseHeight := 14.
 	lineWidth := 0.5.
 	lineColor := Color black alpha: 0.6.
-	heartbeatBaseY := slotHeight*2.
-	colorByTopologyType := {
-		MongoTopologyType unknown -> Color brown.
-		MongoTopologyType replicaSetNoPrimary -> Color veryDarkGray.
-		MongoTopologyType replicaSetWithPrimary -> Color veryLightGray.
-		} asDictionary.
-	serverColorScale := RSColorPalette diverging puor6.
-	colorByCommandType := { 
-		MCMWriteCommander new commandType -> (Color fromString: 'E7298A').
-		MCMReadCommander new commandType -> (Color fromString: '386CB0').
-		} asDictionary.
+	heartbeatBaseY := slotHeight * 2.
+	serverColorScale := RSColorPalette qualitative dark27.
 	commandHeights := { 
 		MCMWriteCommander new commandType -> (slotHeight * 7).
 		MCMReadCommander new commandType -> (slotHeight * 8).
@@ -176,7 +204,7 @@ MCMTimelineBuilder >> pulseRailAtY: y [
 		color: lineColor;
 		dashArray: #(2);
 		startPoint: -3 @ yWithOffset;
-		endPoint: 1000 @ yWithOffset;
+		endPoint: timeScale range last @ yWithOffset;
 		yourself
 ]
 
@@ -185,8 +213,8 @@ MCMTimelineBuilder >> recordingDuration [
 	| startMicroseconds endMicroseconds |
 	self flag: #todo. "The duration should be answered by the events."
 
-	startMicroseconds := scale domain first.
-	endMicroseconds := scale domain last.
+	startMicroseconds := timeScale domain first.
+	endMicroseconds := timeScale domain last.
 	^ ((endMicroseconds - startMicroseconds) / 1000) milliSeconds
 ]
 
@@ -194,7 +222,7 @@ MCMTimelineBuilder >> recordingDuration [
 MCMTimelineBuilder >> refreshServersFrom: aMongoTopology [
 
 	self flag: #todo. "Should support discovering new servers"
-	heartbeatHeights ifNotNil: [ ^self ].
+	heartbeatHeights ifNotNil: [ ^ self ].
 
 	"Stablish the y for each server's heartbeat"
 	heartbeatHeights := Dictionary new.
@@ -227,40 +255,38 @@ MCMTimelineBuilder >> shouldBuildForAnimation: anObject [
 
 { #category : #visiting }
 MCMTimelineBuilder >> visitMCMCommandEvent: event [
-
-	| shape y color |
-	y := commandHeights at: event type.
-	color := colorByCommandType at: event type.
-	shape := self boxFor: event yPosition: y height: pulseHeight.
-	shape
-		color: color;
-		model: event.
+	| shape |
+	shape := self
+		boxFor: event
+		yPosition: (commandHeights at: event type)
+		height: pulseHeight
+		color: (serverColorScale scale: event urlString).
+	shape model: event.
 	self container add: shape
 ]
 
 { #category : #visiting }
 MCMTimelineBuilder >> visitMCMHeartbeatEvent: event [
-
-	| shape y |
-	y := heartbeatHeights at: event urlString.
-	shape := self boxFor: event yPosition: y height: pulseHeight.
-	shape
-		color: (serverColorScale scale: event urlString);
-		model: event.
+	| shape |
+	shape := self
+		boxFor: event
+		yPosition: (heartbeatHeights at: event urlString)
+		height: pulseHeight
+		color: (serverColorScale scale: event urlString).
+	shape model: event.
 	self container add: shape
 ]
 
 { #category : #visiting }
 MCMTimelineBuilder >> visitMCMRecordingEvent: event [
 	
-	| shape |
 	"Create scale for all shapes in the visualization"
-	self assert: scale isNil. "More than one recording in the collection is not yet implemented."
-	scale := NSScale linear
+	self assert: timeScale isNil. "More than one recording in the collection is not yet implemented."
+	timeScale := NSScale linear
 		domain: {
 			event startTimestamp.
 			event endTimestamp };
-		range: { 0. 1000 };
+		range: { 0. 2000 };
 		yourself.
 
 	"Create decorations"
@@ -278,13 +304,13 @@ MCMTimelineBuilder >> visitMCMRecordingEvent: event [
 
 { #category : #visiting }
 MCMTimelineBuilder >> visitMCMTopologyEvent: event [
-
 	| shape |
 	self refreshServersFrom: event topology.
-	
-	shape := self boxFor: event yPosition: slotHeight height: pulseHeight.
-	shape
-		color: (colorByTopologyType at: event topology type);
-		model: event topology.
+	shape := self
+		boxFor: event
+		yPosition: slotHeight
+		height: pulseHeight
+		color: (self colorForTopology: event topology).
+	shape model: event topology.
 	self container add: shape
 ]

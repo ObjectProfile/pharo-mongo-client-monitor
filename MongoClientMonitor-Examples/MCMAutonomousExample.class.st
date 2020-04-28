@@ -15,10 +15,10 @@ MCMAutonomousExample >> start [
 { #category : #accessing }
 MCMAutonomousExample >> startCommanders [
 	writeCommander
-		stepDelay: 50 milliseconds;
+		stepDelay: 25 milliseconds;
 		start.
 	readCommander
-		stepDelay: 50 milliseconds;
+		stepDelay: 25 milliseconds;
 		start
 ]
 
