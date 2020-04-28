@@ -255,12 +255,15 @@ MCMTimelineBuilder >> shouldBuildForAnimation: anObject [
 
 { #category : #visiting }
 MCMTimelineBuilder >> visitMCMCommandEvent: event [
-	| shape |
+	| shape color |
+	color := event hasDoneServerSelection
+		ifTrue: [ serverColorScale scale: event urlString ]
+		ifFalse: [ Color veryLightGray ].
 	shape := self
 		boxFor: event
 		yPosition: (commandHeights at: event type)
 		height: pulseHeight
-		color: (serverColorScale scale: event urlString).
+		color: color.
 	shape model: event.
 	self container add: shape
 ]

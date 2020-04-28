@@ -9,6 +9,11 @@ Class {
 	#category : #'MongoClientMonitor-Examples'
 }
 
+{ #category : #testing }
+MCMCommandEvent >> hasDoneServerSelection [
+	^ serverSelectionDoneTime notNil
+]
+
 { #category : #printing }
 MCMCommandEvent >> printOn: aStream [
 	"Append a sequence of characters to aStream that identify the receiver."
