@@ -8,23 +8,21 @@ A visual monitor for the [Pharo client](https://github.com/pharo-nosql/mongotalk
 
 # Installation
 
-Download a Pharo 8 with this vm:
+1. Download a Pharo 8 with latest headless vm:
 ~~~
 curl https://get.pharo.org/64/80+vmHeadlessLatest | bash
 ~~~
 
-Evaluate the following script:
-
+2. Evaluate the following script:
 ~~~Smalltalk
 Metacello new
     baseline: 'MongoClientMonitor';
     repository: 'github://tinchodias/pharo-mongo-client-monitor';
     load.
 ~~~
-
 It will load Mongo client and Roassal3 as dependencies.
 
-**IMPORTANT:** You need to install a recent version such as 4.0 of mongodb and evaluate:
+3. Install a recent version of mongodb, such as 4.0, and evaluate:
 ~~~Smalltalk
 MongoTestServer mongodPathString: '<PATH_TO_MONGODB>/bin/mongod'.
 ~~~
