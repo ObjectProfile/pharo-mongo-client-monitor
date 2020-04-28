@@ -1,7 +1,9 @@
-# pharo-mongo-client-monitor [![Build Status](https://travis-ci.org/tinchodias/pharo-mongo-client-monitor.png)](http://travis-ci.org/tinchodias/pharo-mongo-client-monitor)
+# Pharo MongoClientMonitor
+
+[![Build Status](https://travis-ci.org/tinchodias/pharo-mongo-client-monitor.png)](http://travis-ci.org/tinchodias/pharo-mongo-client-monitor)
 
 
-A visual monitor the [Pharo client](https://github.com/pharo-nosql/mongotalk) for [Mongodb](https://www.mongodb.com/).
+A visual monitor for the [Pharo client](https://github.com/pharo-nosql/mongotalk) of [Mongodb](https://www.mongodb.com/).
 
 
 # Installation
