@@ -8,7 +8,12 @@ A visual monitor for the [Pharo client](https://github.com/pharo-nosql/mongotalk
 
 # Installation
 
-Evaluate the following script in a Pharo 8:
+Download a Pharo 8 with this vm:
+~~~
+curl https://get.pharo.org/64/80+vmHeadlessLatest | bash
+~~~
+
+Evaluate the following script:
 
 ~~~Smalltalk
 Metacello new
