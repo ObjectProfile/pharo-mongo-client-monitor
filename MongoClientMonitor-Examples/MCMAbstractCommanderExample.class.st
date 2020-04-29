@@ -10,6 +10,18 @@ Class {
 	#category : #'MongoClientMonitor-Examples'
 }
 
+{ #category : #accessing }
+MCMAbstractCommanderExample >> addComment: aString with: aBlock [
+	| aCommentEvent |
+	aCommentEvent := MCMCommentEvent new
+		comment: aString;
+		startTimestamp: recorder timestampNow;
+		yourself.
+	aBlock ensure: [
+		aCommentEvent endTimestamp: recorder timestampNow.
+		recorder addEvent: aCommentEvent ]
+]
+
 { #category : #examples }
 MCMAbstractCommanderExample >> howToUse [
 	"This method lists sentences that alter the status of the testing mongodb replica set."
@@ -62,9 +74,6 @@ MCMAbstractCommanderExample >> recorder [
 { #category : #accessing }
 MCMAbstractCommanderExample >> start [
 	"Start example. Don't forget to #stop it."
-
-	"Ensure the replica set scenario is ready to use."
-	MongoReplicationTestResources waitTestingScenario.
 
 	"Start recording"
 	recorder start.

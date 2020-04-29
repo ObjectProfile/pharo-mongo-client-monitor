@@ -4,14 +4,20 @@ I build Roassal3 canvas with the timeline MCMEvents provided by a MCMRecorder.
 Example:
 -----
 
+""Ensure the replica set scenario is ready to use.""
+MongoReplicationTestResources waitTestingScenario.
+
 example := MCMAutonomousExample new.
 example start.
 5 seconds wait.
-MongoReplicationTestResources signalStopA.
+example addComment: 'SIGSTOP A' with: [ 
+	MongoReplicationTestResources signalStopA ].
 5 seconds wait.
-MongoReplicationTestResources signalStopB.
+example addComment: 'SIGSTOP B' with: [ 
+	MongoReplicationTestResources signalStopB ].
 10 seconds wait.
-MongoReplicationTestResources continueAllServers.
+example addComment: 'SIGCONT *' with: [ 
+	MongoReplicationTestResources continueAllServers ].
 12 seconds wait.
 example stop.
 
@@ -41,7 +47,8 @@ Class {
 		'pulseHeight',
 		'lineWidth',
 		'lineColor',
-		'timeScale'
+		'timeScale',
+		'commentLabelInteraction'
 	],
 	#category : #'MongoClientMonitor-Roassal3'
 }
@@ -174,7 +181,11 @@ MCMTimelineBuilder >> initialize [
 	commandHeights := { 
 		MCMWriteCommander new commandType -> (slotHeight * 7).
 		MCMReadCommander new commandType -> (slotHeight * 8).
-		} asDictionary
+		} asDictionary.
+	
+	commentLabelInteraction := RSLabeled new.
+	commentLabelInteraction location offset: 0@(pulseHeight / -2).
+	commentLabelInteraction text: [ :model | model comment ].
 ]
 
 { #category : #private }
@@ -265,6 +276,18 @@ MCMTimelineBuilder >> visitMCMCommandEvent: event [
 		height: pulseHeight
 		color: color.
 	shape model: event.
+	self container add: shape
+]
+
+{ #category : #visiting }
+MCMTimelineBuilder >> visitMCMCommentEvent: event [ 
+	| shape |
+	shape := self
+		boxFor: event
+		yPosition: (-2* slotHeight)
+		height: pulseHeight
+		color: lineColor.
+	shape model: event; addInteraction: commentLabelInteraction.
 	self container add: shape
 ]
 
