@@ -31,6 +31,6 @@ MCMAutonomousExample >> stop [
 
 { #category : #accessing }
 MCMAutonomousExample >> stopCommanders [
-	writeCommander stop waitForCompletion: 9 seconds.
-	readCommander stop waitForCompletion: 9 seconds.
+	writeCommander stop waitForCompletion: 1 second.
+	readCommander stop waitForCompletion: 1 second.
 ]

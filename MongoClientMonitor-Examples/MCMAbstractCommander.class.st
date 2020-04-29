@@ -84,7 +84,7 @@ MCMAbstractCommander >> commandType [
 MCMAbstractCommander >> initialize [
 	super initialize.
 
-	numberOfMaxRetries := 1.
+	numberOfMaxRetries := 0.
 
 	errorClassesToRetry := MongoServerSelectionTimeout, MongoCommandError, MongoQueryError, NetworkError, MongoWireProtocolError.
 
