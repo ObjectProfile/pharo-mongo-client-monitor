@@ -284,7 +284,7 @@ MCMTimelineBuilder >> visitMCMCommentEvent: event [
 	| shape |
 	shape := self
 		boxFor: event
-		yPosition: (-2* slotHeight)
+		yPosition: (-0.5* slotHeight)
 		height: pulseHeight
 		color: lineColor.
 	shape model: event; addInteraction: commentLabelInteraction.

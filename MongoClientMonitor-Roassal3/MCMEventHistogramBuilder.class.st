@@ -28,9 +28,10 @@ MCMEventHistogramBuilder >> indexOfIntervalFor: each [
 
 { #category : #hooks }
 MCMEventHistogramBuilder >> newChart [
-	| chart p |
+	| chart p numberOfBars |
 	totalMicroseconds := events collect: [ :event | event totalMicroseconds log ].
-	x := 0 to: totalMicroseconds max count: 20.
+	numberOfBars := 20.
+	x := 0 to: totalMicroseconds max count: numberOfBars.
 	histogramRanges := x overlappingPairsCollect: [ :a :b | a to: b ].
 
 	histogramCounts := Array new: histogramRanges size withAll: 0.
@@ -47,6 +48,13 @@ MCMEventHistogramBuilder >> newChart [
 		ylabel: '# events';
 		title: 'Histogram';
 		yourself.
+
+	chart addDecoration: (RSHorizontalTick new
+		numberOfTicks: numberOfBars;
+		asFloat).
+	chart addDecoration: (RSVerticalTick new
+		numberOfTicks: 10;
+		noConvertion).
 
 	chart addPlot: p.
 	^ chart
