@@ -1,3 +1,9 @@
+"
+I represent a recorder for events that happen in a MongoClient.
+
+When I am recording (#isRecording), my responsability is to listen and record the announcements of a MongoClient and also allow users toadd custom events via #addEvent:.
+
+"
 Class {
 	#name : #MCMRecorder,
 	#superclass : #Object,
@@ -45,6 +51,11 @@ MCMRecorder >> initializeWith: aMongoClient [
 	ongoingHeartbeatEvents := SharedQueue new.
 	rawAnnouncements := SharedQueue new.
 
+]
+
+{ #category : #starting }
+MCMRecorder >> isRecording [
+	^ recordingEvent notNil
 ]
 
 { #category : #private }

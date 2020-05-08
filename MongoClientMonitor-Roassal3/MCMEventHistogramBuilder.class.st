@@ -1,3 +1,7 @@
+"
+I build Roassal3 canvas with a histogram of MCMEvents.
+
+"
 Class {
 	#name : #MCMEventHistogramBuilder,
 	#superclass : #Object,

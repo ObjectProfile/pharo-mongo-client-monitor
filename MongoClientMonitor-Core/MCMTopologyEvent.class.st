@@ -1,3 +1,6 @@
+"
+I represent a change in the topology of a MongoClient.
+"
 Class {
 	#name : #MCMTopologyEvent,
 	#superclass : #MCMEvent,
@@ -13,6 +16,6 @@ MCMTopologyEvent >> topology [
 ]
 
 { #category : #accessing }
-MCMTopologyEvent >> topology: anObject [
-	topology := anObject
+MCMTopologyEvent >> topology: aMongoClientTopology [
+	topology := aMongoClientTopology
 ]

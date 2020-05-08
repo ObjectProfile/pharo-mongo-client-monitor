@@ -1,3 +1,6 @@
+"
+I represent a comment, useful to annotate a recording.
+"
 Class {
 	#name : #MCMCommentEvent,
 	#superclass : #MCMEvent,

@@ -1,3 +1,9 @@
+"
+I represent an event that happened in a MongoDB server. 
+
+Since the MongoClient connects wo the server via Socket, every event may be a success (#isSuccess) or a failure.
+
+"
 Class {
 	#name : #MCMServerEvent,
 	#superclass : #MCMEvent,
@@ -14,8 +20,8 @@ MCMServerEvent >> errorDescription [
 ]
 
 { #category : #accessing }
-MCMServerEvent >> errorDescription: anObject [
-	errorDescription := anObject
+MCMServerEvent >> errorDescription: aString [
+	errorDescription := aString
 ]
 
 { #category : #testing }
@@ -41,6 +47,6 @@ MCMServerEvent >> urlString [
 ]
 
 { #category : #accessing }
-MCMServerEvent >> urlString: anObject [
-	urlString := anObject
+MCMServerEvent >> urlString: aString [
+	urlString := aString
 ]

@@ -137,7 +137,7 @@ MCMAbstractCommander >> runWithAvailableRetries: aNumber [
 	
 	[	recorder client
 			mongoDo: [ :mongo |
-				anEvent serverSelectionDoneTime: recorder timestampNow.
+				anEvent serverSelectionDoneTimestamp: recorder timestampNow.
 				anEvent urlString: mongo urlString.
 				self runOn: mongo.
 				anEvent endTimestamp: recorder timestampNow ]

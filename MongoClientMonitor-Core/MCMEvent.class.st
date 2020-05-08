@@ -1,3 +1,8 @@
+"
+I am the top superclass of the hierarchy of MongoClient monitoring events.
+
+All events have start and end as microsecond clock value (Time microsecondClockValue).
+"
 Class {
 	#name : #MCMEvent,
 	#superclass : #Object,
@@ -19,8 +24,8 @@ MCMEvent >> endTimestamp [
 ]
 
 { #category : #accessing }
-MCMEvent >> endTimestamp: anObject [
-	endTime := anObject
+MCMEvent >> endTimestamp: aMicrosecondClockValue [
+	endTime := aMicrosecondClockValue
 ]
 
 { #category : #printing }
@@ -45,8 +50,8 @@ MCMEvent >> startTimestamp [
 ]
 
 { #category : #accessing }
-MCMEvent >> startTimestamp: anObject [
-	startTime := anObject
+MCMEvent >> startTimestamp: aMicrosecondClockValue [
+	startTime := aMicrosecondClockValue
 ]
 
 { #category : #accessing }
