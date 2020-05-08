@@ -5,6 +5,7 @@
 
 A visual monitor for the [Pharo client](https://github.com/pharo-nosql/mongotalk) of [Mongodb](https://www.mongodb.com/).
 
+:warning: WORK IN PROGRESS :warning:
 
 # Installation
 
