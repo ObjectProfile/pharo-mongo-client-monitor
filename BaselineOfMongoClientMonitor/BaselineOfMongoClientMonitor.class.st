@@ -34,7 +34,7 @@ BaselineOfMongoClientMonitor >> declareMongoTalkOn: spec [
 		baseline: 'MongoTalk'
 		with: [
 			spec
-				repository: 'github://tinchodias/mongotalk:features-sdam2/mc';
+				repository: 'github://pharo-nosql/mongotalk:master/mc';
 				loads: 'SDAM' ]
 ]
 
