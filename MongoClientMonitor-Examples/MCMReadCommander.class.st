@@ -19,11 +19,13 @@ MCMReadCommander >> initialize [
 
 { #category : #hooks }
 MCMReadCommander >> runOn: mongo [
-
 	| aDatabase aCollection |
 	aDatabase := mongo databaseNamed: 'x'.
 	aCollection := aDatabase collectionAt: 'y'.
-	(aCollection commandFind: Dictionary new limit: 0 readConcern: nil)
-		setFlagSlaveOk;
-		contents
+	(aCollection
+		commandFind: Dictionary new
+		limit: 10
+		readConcern: MongoReadConcern available)
+			setFlagSlaveOk;
+			contents
 ]
