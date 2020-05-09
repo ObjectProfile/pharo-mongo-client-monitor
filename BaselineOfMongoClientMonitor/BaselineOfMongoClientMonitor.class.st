@@ -35,7 +35,7 @@ BaselineOfMongoClientMonitor >> declareMongoTalkOn: spec [
 		with: [
 			spec
 				repository: 'github://pharo-nosql/mongotalk:master/mc';
-				loads: 'SDAM' ]
+				loads: 'Client' ]
 ]
 
 { #category : #'external projects' }
