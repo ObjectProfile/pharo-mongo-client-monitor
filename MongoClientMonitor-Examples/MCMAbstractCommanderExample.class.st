@@ -10,6 +10,31 @@ Class {
 	#category : #'MongoClientMonitor-Examples'
 }
 
+{ #category : #'instance creation' }
+MCMAbstractCommanderExample class >> defaultClient [
+	| client |
+	client := MongoClient withUrls: MongoReplicationTestResources allMongoUrls.
+	client settings
+		connectTimeout: 5 seconds;
+		socketTimeout: 3 seconds;
+		heartbeatFrequency: 3 seconds;
+		maxConnections: 10;
+		serverSelectionTimeout: 5 seconds.
+	^ client
+]
+
+{ #category : #'instance creation' }
+MCMAbstractCommanderExample class >> new [
+	^ self newWith: self defaultClient
+]
+
+{ #category : #'instance creation' }
+MCMAbstractCommanderExample class >> newWith: aMongoClient [
+	^ self basicNew
+		initializeWith: aMongoClient;
+		yourself
+]
+
 { #category : #accessing }
 MCMAbstractCommanderExample >> addComment: aString with: aBlock [
 	| aCommentEvent |
@@ -45,17 +70,10 @@ MCMAbstractCommanderExample >> howToUse [
 ]
 
 { #category : #accessing }
-MCMAbstractCommanderExample >> initialize [
-	super initialize.
+MCMAbstractCommanderExample >> initializeWith: aMongoClient [
+	self initialize.
 
-	client := MongoClient withUrls: MongoReplicationTestResources allMongoUrls.
-	client settings
-		connectTimeout: 5 seconds;
-		socketTimeout: 3 seconds;
-		heartbeatFrequency: 3 seconds;
-		maxConnections: 10;
-		serverSelectionTimeout: 5 seconds.
-	
+	client := aMongoClient.
 	recorder := MCMRecorder newFor: client.
 	writeCommander := MCMWriteCommander newFor: recorder.
 	readCommander := MCMReadCommander newFor: recorder
